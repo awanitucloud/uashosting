@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Ular Web</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div id="credit-overlay" class="overlay">
+        <div class="popup-box">
+            <h2>Credits</h2>
+            
+            <h3>Ular Kobra</h3>
+            <p>
+                Game ular klasik yang dibuat ulang dengan JavaScript dan Firebase. <br>
+                Makan makanan, hindari racun dan penghalang, dan raih skor tertinggi!
+            </p>
+
+            <div class="profile-container">
+                <div class="profile-card">
+                    <img src="{{ url_for('static', filename='foto_anggota1.jpg') }}" alt="Foto Anggota 1" onerror="this.src='https://placehold.co/100x100/eeeeee/222222?text=Nama1'">
+                    <h4>Nama Anggota 1</h4>
+                    <p>Keterangan (mis: Lead Dev)</p>
+                </div>
+                <div class="profile-card">
+                    <img src="{{ url_for('static', filename='foto_anggota2.jpg') }}" alt="Foto Anggota 2" onerror="this.src='https://placehold.co/100x100/eeeeee/222222?text=Nama2'">
+                    <h4>Nama Anggota 2</h4>
+                    <p>Keterangan (mis: UI/UX)</p>
+                </div>
+                <div class="profile-card">
+                    <img src="{{ url_for('static', filename='foto_anggota3.jpg') }}" alt="Foto Anggota 3" onerror="this.src='https://placehold.co/100x100/eeeeee/222222?text=Nama3'">
+                    <h4>Nama Anggota 3</h4>
+                    <p>Keterangan</p>
+                </div>
+                <div class="profile-card">
+                    <img src="{{ url_for('static', filename='foto_anggota4.jpg') }}" alt="Foto Anggota 4" onerror="this.src='https://placehold.co/100x100/eeeeee/222222?text=Nama4'">
+                    <h4>Nama Anggota 4</h4>
+                    <p>Keterangan</p>
+                </div>
+                <div class="profile-card">
+                    <img src="{{ url_for('static', filename='foto_anggota5.jpg') }}" alt="Foto Anggota 5" onerror="this.src='https://placehold.co/100x100/eeeeee/222222?text=AI'">
+                    <h4>Gemini</h4>
+                    <p>Asisten AI</p>
+                </div>
+            </div>
+
+            <div class="github-link">
+                <h4>Source Code</h4>
+                <a href="#" target="_blank">Lihat di GitHub</a>
+            </div>
+
+            <div class="button-group">
+                <button id="close-credit-button" class="secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="menu-overlay" class="overlay">
+        <div class="popup-box" id="menu-box">
+            <h2>Masukkan Nama Kamu</h2>
+            <input type="text" id="playerNameInput" placeholder="Pemain 1" maxlength="15">
+            <div class="theme-selector">
+                <fieldset>
+                    <legend>Tema Arena</legend>
+                    <label>
+                        <input type="radio" name="envTheme" value="hutan" checked> Hutan
+                    </label>
+                    <label>
+                        <input type="radio" name="envTheme" value="gurun"> Gurun
+                    </label>
+                </fieldset>
+                <fieldset>
+                    <legend>Tema Ular</legend>
+                    <label>
+                        <input type="radio" name="snakeTheme" value="hutan" checked> Ular Hutan
+                    </label>
+                    <label>
+                        <input type="radio" name="snakeTheme" value="gurun"> Ular Gurun
+                    </label>
+                </fieldset>
+            </div>
+            
+            <button id="startGameButton">Mulai Game</button>
+            <button id="credit-button" class="secondary-menu">Credits</button>
+        </div>
+    </div>
+
+    <div id="pause-overlay" class="overlay">
+        <div class="popup-box">
+            <h2>PAUSED</h2>
+            <div class="button-group">
+                <button id="continue-button">Continue</button>
+                <button id="back-to-menu-pause" class="secondary">Back to Home</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="gameover-overlay" class="overlay">
+        <div class="popup-box">
+            <h2 style="color: #f44336;">GAME OVER</h2>
+            <h3>Skor Kamu: <span id="final-score">0</span></h3>
+            <div class="button-group">
+                <button id="restart-button">Restart Game</button>
+                <button id="back-to-menu-gameover" class="secondary">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="game-container">
+            <h1>Ular Kobra</h1>
+            <div class="score-display">
+                <h3 id="score">Pemain: | Skor: 0</h3>
+            </div>
+            <canvas id="gameCanvas" width="500" height="500"></canvas>
+        </div>
+        <div class="leaderboard">
+            <h2>Top 5 Global</h2>
+            <ol>
+                <li id="rank-1"><span class="name">Loading...</span> <span class="score"></span></li>
+                <li id="rank-2"><span class="name">...</span> <span class="score"></span></li>
+                <li id="rank-3"><span class="name">...</span> <span class="score"></span></li>
+                <li id="rank-4"><span class="name">...</span> <span class="score"></span></li>
+                <li id="rank-5"><span class="name">...</span> <span class="score"></span></li>
+            </ol>
+        </div>
+    </div>
+
+    <audio id="gameMusic" src="{{ url_for('static', filename='music.mp3') }}" loop></audio>
+
+    <script src="{{ url_for('static', filename='js/firebaseInit.js') }}" type="module"></script>
+    
+    <script src="{{ url_for('static', filename='js/database.js') }}" type="module"></script>
+    <script src="{{ url_for('static', filename='js/ui.js') }}" type="module"></script>
+    <script src="{{ url_for('static', filename='js/entities.js') }}" type="module"></script>
+    
+    <script src="{{ url_for('static', filename='js/game.js') }}" type="module"></script>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}" type="module"></script>
+</body>
+</html>
